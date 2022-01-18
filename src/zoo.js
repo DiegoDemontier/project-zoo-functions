@@ -57,15 +57,14 @@ function calculateEntry(entrants = 0) {
 }
 
 // função que retorna animais categorizados por localização
-const animaBaylLocation = (animalLocation) => {
-  const arrayByName = [];
-  species.map(({ name, location }) => {
-    if (animalLocation === location) {
-      arrayByName.push(name);
-    }
-    return undefined;
-  });
-  byLocation[animalLocation] = arrayByName;
+const animaBaylLocation = () => {
+  const animais = species.reduce((acc, curr) => {
+    acc[curr.location] = species
+      .filter(({ location }) => location === curr.location)
+      .map(({ name }) => name);
+    return acc;
+  }, {});
+  return animais;
 };
 
 // Com a opção `includeNames: true` e `sorted: true`(opcional) especificada, retorna nomes de animais'
@@ -122,8 +121,7 @@ const newCatalog = (options) => {
 function getAnimalMap(options) {
   // seu código aqui
   if (!options || !options.includeNames) {
-    species.map(({ location }) => animaBaylLocation(location));
-    return byLocation;
+    return animaBaylLocation();
   }
   return newCatalog(options);
 }
